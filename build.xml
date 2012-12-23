@@ -1,0 +1,20 @@
+<project name="HouseLights" default="compile">
+
+	<path id="gwt.path">
+		<pathelement location="./src"/>
+		<pathelement path="lib/gwt/gwt-user.jar"/>
+		<pathelement path="lib/gwt/gwt-dev.jar"/>
+		<pathelement path="lib/gwt/validation-api-1.0.0.GA-sources.jar"/>
+		<pathelement path="lib/gwt/validation-api-1.0.0.GA.jar"/>
+		<pathelement path="lib/mgwt/mgwt-1.1.2.jar"/>
+	</path>
+	<target name="compile">
+		<java classpathref="gwt.path" classname="com.google.gwt.dev.Compiler" fork="true" maxmemory="1024M" failonerror="true">
+			<arg value="-localWorkers"/>
+			<arg value="2"/>
+			<arg value="-war"/>
+			<arg value="."/>
+			<arg value="com.jones.matt.house.lights.HouseLights"/>
+		</java>
+	</target>
+</project>

@@ -11,12 +11,14 @@
 	<title>House Lights</title>
 	<script type="text/javascript" language="javascript" src="HouseLights.nocache.js"></script>
 	<script type="text/javascript">
-		window.LightData = new Object();
-		window.LightData.Server = "http://localhost:8086";
+		window.LightData = {};
+		window.LightData.Server = "http://localhost/cgi-bin/lights?";
 		window.LightData.Lights = new Array("A2", "Living Room",
 				"A3", "Kitchen",
-				"A1", "Bathroom",
+				"A4", "Bathroom",
+				"A6", "Upstairs",
 				"A13", "Front Porch",
+				"A11", "Front House",
 				"z99", "All On/Off");
 	</script>
 </head>

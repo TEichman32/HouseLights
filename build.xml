@@ -1,4 +1,13 @@
-<project name="HouseLights" default="compile">
+<project name="HouseLights" default="dist">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant/ant-contrib-1.0b3.jar"/>
+		</classpath>
+	</taskdef>
+
+	<property name="manifest" value="manifest.appcache"/>
+	<property name="final.dir" value="HouseLights"/>
 
 	<path id="gwt.path">
 		<pathelement location="./src"/>
@@ -8,6 +17,12 @@
 		<pathelement path="lib/gwt/validation-api-1.0.0.GA.jar"/>
 		<pathelement path="lib/mgwt/mgwt-1.1.2.jar"/>
 	</path>
+
+	<target name="dist">
+		<ant target="compile"/>
+		<ant target="manifest"/>
+	</target>
+
 	<target name="compile">
 		<java classpathref="gwt.path" classname="com.google.gwt.dev.Compiler" fork="true" maxmemory="1024M" failonerror="true">
 			<arg value="-localWorkers"/>
@@ -16,5 +31,32 @@
 			<arg value="."/>
 			<arg value="com.jones.matt.house.lights.HouseLights"/>
 		</java>
+	</target>
+
+	<target name="manifest">
+		<echo message="copying ${manifest} to /${final.dir}"/>
+		<copy file="resources/${manifest}" tofile="${final.dir}/${manifest}" />
+
+		<echo message="manifest cleaning" />
+
+		<!-- update version -->
+		<echo message="Updating the site.manifest version date to today"/>
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
+		</tstamp>
+		<replaceregexp match="# version .+" replace="# version ${TODAY}" file="${final.dir}/${manifest}"/>
+
+		<!-- replace javascript files -->
+		<echo message="Updating the site.manifest with the new js"/>
+		<for param="file">
+			<path>
+				<fileset dir="HouseLights" includes="*.cache.html"/>
+			</path>
+			<sequential>
+				<basename property="filename.@{file}" file="@{file}" />
+				<echo message="${filename.@{file}}${line.separator}" file="${final.dir}/${manifest}" append="true"/>
+			</sequential>
+		</for>
+		<echo message="FALLBACK:${line.separator}${line.separator}NETWORK:${line.separator}*" file="${final.dir}/${manifest}" append="true"/>
 	</target>
 </project>

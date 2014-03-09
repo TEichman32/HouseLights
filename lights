@@ -1,0 +1,13 @@
+#!c:/perl/bin/perl.exe -w
+#Perl Script to trigger lights on different port than main web server.
+use strict;
+use LWP::Simple;
+use CGI;
+
+my $aQuery = CGI->new();
+my $anAction = $aQuery->param('action');
+my $aChannel = $aQuery->param('channel');
+my $aUrl = "http://localhost:8086/?x10command=DEVICE~sendrf~%22${aChannel}%20${anAction}%22";
+my $response = get $aUrl;
+print "Content-type: text/plain; charset=UTF-8\n\n";
+print $response;

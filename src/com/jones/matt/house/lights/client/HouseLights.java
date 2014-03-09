@@ -23,7 +23,6 @@ public class HouseLights implements EntryPoint
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		myContent = new FlexTable();
 		myContent.setWidth("100%");
-		LayoutPanel aLayoutPanel = new LayoutPanel();
 		for(int ai = 0; ai < getLightData().size(); ai++)
 		{
 			generateRow(ai);

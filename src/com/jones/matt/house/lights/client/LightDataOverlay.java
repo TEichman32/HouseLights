@@ -15,8 +15,8 @@ public class LightDataOverlay extends JavaScriptObject
 
 	public final String getUrl(int theIndex, String theState)
 	{
-		return getServer() + "/?x10command=DEVICE~sendrf~\""
-				+ getChannel(theIndex) + " " + theState + "\"";
+		return getServer() + "channel="
+				+ getChannel(theIndex) + "&action=" + theState;
 	}
 
 	public final native String getLabel(int theIndex) /*-{

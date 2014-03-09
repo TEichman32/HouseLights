@@ -7,12 +7,22 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-iphone4.png"/>
 	<link rel="icon" type="image/png" href="apple-touch-icon-iphone4.png"/>
 	<style type="text/css">
+		.gwt-Label
+		{
+			white-space: nowrap;
+			margin: 5px;
+		}
+		.base
+		{
+			width:100%;
+		}
 	</style>
 	<title>House Lights</title>
 	<script type="text/javascript" language="javascript" src="HouseLights.nocache.js"></script>
 	<script type="text/javascript">
+		var aBaseUrl = "http://localhost/cgi-bin/";
 		window.LightData = {};
-		window.LightData.Server = "http://localhost/cgi-bin/lights?";
+		window.LightData.Server = aBaseUrl + "lights?";
 		window.LightData.Lights = new Array("A2", "Living Room",
 				"A3", "Kitchen",
 				"A4", "Bathroom",
@@ -20,6 +30,9 @@
 				"A13", "Front Porch",
 				"A11", "Front House",
 				"z99", "All On/Off");
+		window.CloseUrl = aBaseUrl + "garage?action=Close";
+		window.OpenUrl = aBaseUrl + "garage?action=Open";
+		window.StatusUrl = aBaseUrl + "garage?action=Status";
 	</script>
 </head>
 <body>

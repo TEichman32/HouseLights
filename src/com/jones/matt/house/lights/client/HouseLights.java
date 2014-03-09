@@ -22,34 +22,60 @@ public class HouseLights implements EntryPoint
 	{
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		myContent = new FlexTable();
-		myContent.setWidth("100%");
+		myContent.addStyleName("base");
 		for(int ai = 0; ai < getLightData().size(); ai++)
 		{
-			generateRow(ai);
+			generateRow(getLightData().getLabel(ai), "Off", getHandler(ai, "off"), "On", getHandler(ai, "on"));
 		}
+		setupGarageDoor();
 		RootPanel.get().add(myContent);
 	}
 
 	/**
-	 * Generate a single row of light controls
+	 * Generate a single row of controls
 	 *
-	 * @param theIndex
+	 * @param theLabel label for the row
+	 * @param theLabel1 label for the first button
+	 * @param theTapHandler1 tap handler for the first button
+	 * @param theLabel2 label for the second button
+	 * @param theTapHandler2 tap handler for the second button
 	 */
-	private void generateRow(int theIndex)
+	private void generateRow(String theLabel, String theLabel1, TapHandler theTapHandler1, String theLabel2, TapHandler theTapHandler2)
 	{
 		int aRow = myContent.getRowCount();
-		Label aLabel = new Label(getLightData().getLabel(theIndex));
-		aLabel.getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NOWRAP);
-		aLabel.getElement().getStyle().setMargin(5, Style.Unit.PX);
+		Label aLabel = new Label(theLabel);
 		myContent.setWidget(aRow, 0, aLabel);
 		myContent.getFlexCellFormatter().setVerticalAlignment(aRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		myContent.getFlexCellFormatter().setWidth(aRow, 0, "1%");
-		Button button = new Button("Off");
-		button.addTapHandler(getHandler(theIndex, "off"));
+		Button button = new Button(theLabel1);
+		button.addTapHandler(theTapHandler1);
 		myContent.setWidget(aRow, 1, button);
-		button = new Button("On");
-		button.addTapHandler(getHandler(theIndex, "on"));
+		button = new Button(theLabel2);
+		button.addTapHandler(theTapHandler2);
 		myContent.setWidget(aRow, 2, button);
+	}
+
+	/**
+	 * Setup the buttons to open/close the garage door
+	 */
+	private void setupGarageDoor()
+	{
+		generateRow("Garage Door", "Close",
+				new TapHandler()
+				{
+					public void onTap(TapEvent event)
+					{
+						new MyRequestBuilder(RequestBuilder.HEAD, getClose()).send();
+					}
+				},
+				"Open",
+				new TapHandler()
+				{
+					public void onTap(TapEvent event)
+					{
+						new MyRequestBuilder(RequestBuilder.HEAD, getOpen()).send();
+					}
+				});
 	}
 
 	/**
@@ -65,26 +91,39 @@ public class HouseLights implements EntryPoint
 		{
 			public void onTap(TapEvent event)
 			{
-				RequestBuilder aBuilder = new RequestBuilder(RequestBuilder.HEAD,
-						getLightData().getUrl(theIndex, theOperation));
-				aBuilder.setCallback(new RequestCallback()
-				{
-					public void onResponseReceived(Request request, Response response){}
-
-					public void onError(Request request, Throwable exception){}
-				});
-				try
-				{
-					aBuilder.send();
-				}
-				catch (RequestException e)
-				{
-					e.printStackTrace();
-				}
+				new MyRequestBuilder(RequestBuilder.HEAD,
+						getLightData().getUrl(theIndex, theOperation)).send();
 			}
 		};
 	}
 
+	private class MyRequestBuilder extends RequestBuilder
+	{
+		public MyRequestBuilder(Method theHttpMethod, String theUrl)
+		{
+			super(theHttpMethod, theUrl);
+			setCallback(new RequestCallback()
+			{
+				public void onResponseReceived(Request request, Response response){}
+
+				public void onError(Request request, Throwable exception){}
+			});
+		}
+
+		@Override
+		public Request send()
+		{
+			try
+			{
+				return super.send();
+			}
+			catch (RequestException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
 	/**
 	 * Get the data from our html page (set there for easier changing w/o recompile
 	 *
@@ -92,5 +131,17 @@ public class HouseLights implements EntryPoint
 	 */
 	private static native LightDataOverlay getLightData() /*-{
 		return $wnd.LightData;
+	}-*/;
+
+	private static native String getClose() /*-{
+		return $wnd.CloseUrl;
+	}-*/;
+
+	private static native String getOpen() /*-{
+		return $wnd.OpenUrl;
+	}-*/;
+
+	private static native String getStatus() /*-{
+		return $wnd.StatusUrl;
 	}-*/;
 }

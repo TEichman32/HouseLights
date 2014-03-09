@@ -18,7 +18,7 @@
 		<pathelement path="lib/mgwt/mgwt-1.1.2.jar"/>
 	</path>
 
-	<target name="dist">
+	<target name="dist" description="Compiles GWT application, generates manifest.appcache.  Places files in HouseLights">
 		<ant target="compile"/>
 		<ant target="manifest"/>
 	</target>

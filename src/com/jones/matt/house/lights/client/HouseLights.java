@@ -1,15 +1,12 @@
 package com.jones.matt.house.lights.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.widget.Button;
-import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
 
 /**
  * Control X10 house lights via Ajax call to external REST server
@@ -43,8 +40,7 @@ public class HouseLights implements EntryPoint
 	private void generateRow(String theLabel, String theLabel1, TapHandler theTapHandler1, String theLabel2, TapHandler theTapHandler2)
 	{
 		int aRow = myContent.getRowCount();
-		Label aLabel = new Label(theLabel);
-		myContent.setWidget(aRow, 0, aLabel);
+		myContent.setWidget(aRow, 0, new Label(theLabel));
 		myContent.getFlexCellFormatter().setVerticalAlignment(aRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		myContent.getFlexCellFormatter().setWidth(aRow, 0, "1%");
 		Button button = new Button(theLabel1);
@@ -60,22 +56,12 @@ public class HouseLights implements EntryPoint
 	 */
 	private void setupGarageDoor()
 	{
-		generateRow("Garage Door", "Close",
-				new TapHandler()
-				{
-					public void onTap(TapEvent event)
-					{
-						new MyRequestBuilder(RequestBuilder.HEAD, getClose()).send();
-					}
-				},
-				"Open",
-				new TapHandler()
-				{
-					public void onTap(TapEvent event)
-					{
-						new MyRequestBuilder(RequestBuilder.HEAD, getOpen()).send();
-					}
-				});
+		int aRow = myContent.getRowCount();
+		myContent.setWidget(aRow, 0, new Label("Garage Door"));
+		myContent.getFlexCellFormatter().setVerticalAlignment(aRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+		myContent.getFlexCellFormatter().setWidth(aRow, 0, "1%");
+		myContent.setWidget(aRow, 1, new GarageDoorButton());
+		myContent.getFlexCellFormatter().setColSpan(aRow, 1, 2);
 	}
 
 	/**
@@ -91,39 +77,11 @@ public class HouseLights implements EntryPoint
 		{
 			public void onTap(TapEvent event)
 			{
-				new MyRequestBuilder(RequestBuilder.HEAD,
-						getLightData().getUrl(theIndex, theOperation)).send();
+				new DefaultRequestBuilder(getLightData().getUrl(theIndex, theOperation)).send();
 			}
 		};
 	}
 
-	private class MyRequestBuilder extends RequestBuilder
-	{
-		public MyRequestBuilder(Method theHttpMethod, String theUrl)
-		{
-			super(theHttpMethod, theUrl);
-			setCallback(new RequestCallback()
-			{
-				public void onResponseReceived(Request request, Response response){}
-
-				public void onError(Request request, Throwable exception){}
-			});
-		}
-
-		@Override
-		public Request send()
-		{
-			try
-			{
-				return super.send();
-			}
-			catch (RequestException e)
-			{
-				e.printStackTrace();
-			}
-			return null;
-		}
-	}
 	/**
 	 * Get the data from our html page (set there for easier changing w/o recompile
 	 *
@@ -131,17 +89,5 @@ public class HouseLights implements EntryPoint
 	 */
 	private static native LightDataOverlay getLightData() /*-{
 		return $wnd.LightData;
-	}-*/;
-
-	private static native String getClose() /*-{
-		return $wnd.CloseUrl;
-	}-*/;
-
-	private static native String getOpen() /*-{
-		return $wnd.OpenUrl;
-	}-*/;
-
-	private static native String getStatus() /*-{
-		return $wnd.StatusUrl;
 	}-*/;
 }

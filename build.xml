@@ -6,8 +6,7 @@
 		</classpath>
 	</taskdef>
 
-	<property name="manifest" value="manifest.appcache"/>
-	<property name="final.dir" value="HouseLights"/>
+	<property file="default.properties"/>
 
 	<path id="gwt.path">
 		<pathelement location="./src"/>
@@ -21,16 +20,23 @@
 	<target name="dist" description="Compiles GWT application, generates manifest.appcache.  Places files in HouseLights">
 		<ant target="compile"/>
 		<ant target="manifest"/>
+		<ant target="updatePaths"/>
 	</target>
 
 	<target name="compile">
 		<java classpathref="gwt.path" classname="com.google.gwt.dev.Compiler" fork="true" maxmemory="1024M" failonerror="true">
 			<arg value="-localWorkers"/>
-			<arg value="2"/>
+			<arg value="${gwt.workers}"/>
 			<arg value="-war"/>
 			<arg value="."/>
 			<arg value="com.jones.matt.house.lights.HouseLights"/>
 		</java>
+	</target>
+
+	<target name="updatePaths">
+		<replaceregexp match="#BaseUrl#" replace="${BaseUrl}" file="${final.dir}/HouseLights.html"/>
+		<replaceregexp match="#GarageUrl#" replace="${GarageUrl}" file="garage"/>
+		<replaceregexp match="#LightsUrl#" replace="${LightsUrl}" file="lights"/>
 	</target>
 
 	<target name="manifest">

@@ -6,7 +6,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Timer;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.button.Button;
 
 /**
  * Button for garage door, displays Open or Closed based on status.  Queries server
@@ -18,14 +18,15 @@ public class GarageDoorButton extends Button implements TapHandler
 
 	public GarageDoorButton()
 	{
-		super("Open");
+		super("Open Garage");
+		addStyleName("garage-button");
 		addTapHandler(this);
 		new StatusTimer().run();
 	}
 
 	public void onTap(TapEvent theEvent)
 	{
-		String aUrl = getText().equals("Close") ? getClose() : getOpen();
+		String aUrl = getText().equals("Close Garage") ? getClose() : getOpen();
 		new DefaultRequestBuilder(aUrl).send();
 	}
 
@@ -36,7 +37,7 @@ public class GarageDoorButton extends Button implements TapHandler
 	{
 		public void onResponseReceived(Request theRequest, Response theResponse)
 		{
-			setText(theResponse.getText().equals("false") ? "Open" : "Close");
+			setText(theResponse.getText().equals("false") ? "Open Garage" : "Close Garage");
 			new StatusTimer().schedule(kDelay);
 		}
 

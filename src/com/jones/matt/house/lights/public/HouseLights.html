@@ -2,6 +2,7 @@
 <html manifest="manifest.appcache">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="apple-touch-startup-image" href="full.png">
 	<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 	<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-iphone4.png"/>
@@ -12,9 +13,17 @@
 			white-space: nowrap;
 			margin: 5px;
 		}
-		.base
+		.button-grow
 		{
-			width:100%;
+			flex-grow:1;
+			flex-basis:100px;
+			-webkit-flex-grow:1;
+			-webkit-flex-basis:100px;
+			padding:15px !important;
+		}
+		.garage-button
+		{
+			padding:15px !important;
 		}
 	</style>
 	<title>House Lights</title>

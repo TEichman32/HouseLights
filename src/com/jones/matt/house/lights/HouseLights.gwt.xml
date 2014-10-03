@@ -3,5 +3,6 @@
 <module rename-to="HouseLights">
 	<inherits name='com.google.gwt.user.User'/>
 	<inherits name='com.googlecode.mgwt.MGWT'/>
+	<inherits name="com.googlecode.mgwt.ui.client.theme.platform.Platform" />
 	<entry-point class='com.jones.matt.house.lights.client.HouseLights'/>
 </module>

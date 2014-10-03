@@ -14,7 +14,7 @@
 		<pathelement path="lib/gwt/gwt-dev.jar"/>
 		<pathelement path="lib/gwt/validation-api-1.0.0.GA-sources.jar"/>
 		<pathelement path="lib/gwt/validation-api-1.0.0.GA.jar"/>
-		<pathelement path="lib/mgwt/mgwt-1.1.2.jar"/>
+		<pathelement path="lib/mgwt/mgwt-2.0.0.jar"/>
 	</path>
 
 	<target name="dist" description="Compiles GWT application, generates manifest.appcache.  Places files in HouseLights">

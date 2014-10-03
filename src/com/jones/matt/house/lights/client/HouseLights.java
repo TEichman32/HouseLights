@@ -1,30 +1,33 @@
 package com.jones.matt.house.lights.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
-import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.button.Button;
+import com.googlecode.mgwt.ui.client.widget.panel.flex.FlexPanel;
+import com.googlecode.mgwt.ui.client.widget.panel.flex.FlexPropertyHelper;
+import com.googlecode.mgwt.ui.client.widget.panel.flex.RootFlexPanel;
 
 /**
  * Control X10 house lights via Ajax call to external REST server
  */
 public class HouseLights implements EntryPoint
 {
-	private FlexTable myContent;
+	private RootFlexPanel myContent;
 
 	public void onModuleLoad()
 	{
 		MGWT.applySettings(MGWTSettings.getAppSetting());
-		myContent = new FlexTable();
-		myContent.addStyleName("base");
+		myContent = new RootFlexPanel();
 		for(int ai = 0; ai < getLightData().size(); ai++)
 		{
 			generateRow(getLightData().getLabel(ai), "Off", getHandler(ai, "off"), "On", getHandler(ai, "on"));
 		}
-		setupGarageDoor();
+		myContent.add(new GarageDoorButton());
 		RootPanel.get().add(myContent);
 	}
 
@@ -39,29 +42,19 @@ public class HouseLights implements EntryPoint
 	 */
 	private void generateRow(String theLabel, String theLabel1, TapHandler theTapHandler1, String theLabel2, TapHandler theTapHandler2)
 	{
-		int aRow = myContent.getRowCount();
-		myContent.setWidget(aRow, 0, new Label(theLabel));
-		myContent.getFlexCellFormatter().setVerticalAlignment(aRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-		myContent.getFlexCellFormatter().setWidth(aRow, 0, "1%");
-		Button button = new Button(theLabel1);
+		FlexPanel aButtonHolder = new FlexPanel();
+		aButtonHolder.setOrientation(FlexPropertyHelper.Orientation.HORIZONTAL);
+		Button button = new Button(theLabel);
+		button.setImportant(true);
+		button.addStyleName("button-grow");
 		button.addTapHandler(theTapHandler1);
-		myContent.setWidget(aRow, 1, button);
+		aButtonHolder.add(button);
 		button = new Button(theLabel2);
+		button.setConfirm(true);
+		button.addStyleName("button-grow");
 		button.addTapHandler(theTapHandler2);
-		myContent.setWidget(aRow, 2, button);
-	}
-
-	/**
-	 * Setup the buttons to open/close the garage door
-	 */
-	private void setupGarageDoor()
-	{
-		int aRow = myContent.getRowCount();
-		myContent.setWidget(aRow, 0, new Label("Garage Door"));
-		myContent.getFlexCellFormatter().setVerticalAlignment(aRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-		myContent.getFlexCellFormatter().setWidth(aRow, 0, "1%");
-		myContent.setWidget(aRow, 1, new GarageDoorButton());
-		myContent.getFlexCellFormatter().setColSpan(aRow, 1, 2);
+		aButtonHolder.add(button);
+		myContent.add(aButtonHolder);
 	}
 
 	/**

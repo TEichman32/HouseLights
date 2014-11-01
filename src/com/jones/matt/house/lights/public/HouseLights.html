@@ -12,14 +12,21 @@
 		{
 			white-space: nowrap;
 			margin: 5px;
+			text-align: center;
 		}
-		.button-grow
+		.button-grow, .weather .gwt-Label
 		{
 			flex-grow:1;
 			flex-basis:100px;
 			-webkit-flex-grow:1;
 			-webkit-flex-basis:100px;
 			padding:15px !important;
+		}
+		.weather .gwt-Label
+		{
+			font-weight: bold;
+			color:#ffffff;
+			border-radius: 6px;
 		}
 		.garage-button
 		{
@@ -42,6 +49,8 @@
 		window.CloseUrl = aBaseUrl + "garage?action=Close";
 		window.OpenUrl = aBaseUrl + "garage?action=Open";
 		window.StatusUrl = aBaseUrl + "garage?action=Status";
+		window.WeatherUrl = aBaseUrl + "garage?action=Weather";
+		window.PollDelay = 5000;
 	</script>
 </head>
 <body>

@@ -28,6 +28,7 @@ public class HouseLights implements EntryPoint
 			generateRow(getLightData().getLabel(ai), "Off", getHandler(ai, "off"), "On", getHandler(ai, "on"));
 		}
 		myContent.add(new GarageDoorButton());
+		myContent.add(new WeatherLabel());
 		RootPanel.get().add(myContent);
 	}
 
@@ -82,5 +83,9 @@ public class HouseLights implements EntryPoint
 	 */
 	private static native LightDataOverlay getLightData() /*-{
 		return $wnd.LightData;
+	}-*/;
+
+	public static final native int getPollingDelay() /*-{
+		return $wnd.PollDelay;
 	}-*/;
 }

@@ -14,8 +14,6 @@ import com.googlecode.mgwt.ui.client.widget.button.Button;
  */
 public class GarageDoorButton extends Button implements TapHandler
 {
-	public static final int kDelay = 5000;
-
 	public GarageDoorButton()
 	{
 		super("Open Garage");
@@ -38,12 +36,12 @@ public class GarageDoorButton extends Button implements TapHandler
 		public void onResponseReceived(Request theRequest, Response theResponse)
 		{
 			setText(theResponse.getText().equals("false") ? "Open Garage" : "Close Garage");
-			new StatusTimer().schedule(kDelay);
+			new StatusTimer().schedule(HouseLights.getPollingDelay());
 		}
 
 		public void onError(Request theRequest, Throwable theException)
 		{
-			new StatusTimer().schedule(kDelay);
+			new StatusTimer().schedule(HouseLights.getPollingDelay());
 		}
 	}
 

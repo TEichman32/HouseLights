@@ -15,8 +15,7 @@ public class LightDataOverlay extends JavaScriptObject
 
 	public final String getUrl(int theIndex, String theState)
 	{
-		return getServer() + "channel="
-				+ getChannel(theIndex) + "&action=" + theState;
+		return getChannel(theIndex) + "/" + theState;
 	}
 
 	public final native String getLabel(int theIndex) /*-{
@@ -25,9 +24,5 @@ public class LightDataOverlay extends JavaScriptObject
 
 	private native String getChannel(int theIndex) /*-{
 		return this.Lights[theIndex * 2];
-	}-*/;
-
-	private native String getServer() /*-{
-		return this.Server;
 	}-*/;
 }

@@ -1,10 +1,13 @@
 package com.jones.matt.house.lights.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.dom.client.recognizer.longtap.LongTapEvent;
+import com.googlecode.mgwt.dom.client.recognizer.longtap.LongTapHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.widget.button.Button;
@@ -19,13 +22,15 @@ public class HouseLights implements EntryPoint
 {
 	private RootFlexPanel myContent;
 
+	private long myTime = -1;
+
 	public void onModuleLoad()
 	{
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		myContent = new RootFlexPanel();
 		for(int ai = 0; ai < getLightData().size(); ai++)
 		{
-			generateRow(getLightData().getLabel(ai), "Off", getHandler(ai, "off"), "On", getHandler(ai, "on"));
+			generateRow(ai);
 		}
 		myContent.add(new GarageDoorButton());
 		myContent.add(new WeatherLabel());
@@ -41,20 +46,29 @@ public class HouseLights implements EntryPoint
 	 * @param theLabel2 label for the second button
 	 * @param theTapHandler2 tap handler for the second button
 	 */
-	private void generateRow(String theLabel, String theLabel1, TapHandler theTapHandler1, String theLabel2, TapHandler theTapHandler2)
+	private void generateRow(final int theIndex)
 	{
 		FlexPanel aButtonHolder = new FlexPanel();
 		aButtonHolder.setOrientation(FlexPropertyHelper.Orientation.HORIZONTAL);
-		Button button = new Button(theLabel);
-		button.setImportant(true);
-		button.addStyleName("button-grow");
-		button.addTapHandler(theTapHandler1);
-		aButtonHolder.add(button);
-		button = new Button(theLabel2);
-		button.setConfirm(true);
-		button.addStyleName("button-grow");
-		button.addTapHandler(theTapHandler2);
-		aButtonHolder.add(button);
+		Button aButton = new Button(getLightData().getLabel(theIndex));
+		aButton.setImportant(true);
+		aButton.addStyleName("button-grow");
+		aButton.addLongTapHandler(new LongTapHandler()
+		{
+			public void onLongTap(LongTapEvent event)
+			{
+				new DefaultRequestBuilder(getLightData().getUrl(theIndex, "movie")).send();
+				myTime = System.currentTimeMillis();
+
+			}
+		});
+		aButton.addTapHandler(getHandler(theIndex, "off"));
+		aButtonHolder.add(aButton);
+		aButton = new Button("On");
+		aButton.setConfirm(true);
+		aButton.addStyleName("button-grow");
+		aButton.addTapHandler(getHandler(theIndex, "on"));
+		aButtonHolder.add(aButton);
 		myContent.add(aButtonHolder);
 	}
 
@@ -71,7 +85,11 @@ public class HouseLights implements EntryPoint
 		{
 			public void onTap(TapEvent event)
 			{
-				new DefaultRequestBuilder(getLightData().getUrl(theIndex, theOperation)).send();
+				if (myTime < System.currentTimeMillis() - 4000)
+				{
+					new DefaultRequestBuilder(getLightData().getUrl(theIndex, theOperation)).send();
+				}
+				myTime = -1;
 			}
 		};
 	}

@@ -36,20 +36,18 @@
 	<title>House Lights</title>
 	<script type="text/javascript" language="javascript" src="HouseLights.nocache.js"></script>
 	<script type="text/javascript">
-		var aBaseUrl = "#BaseUrl#";
 		window.LightData = {};
-		window.LightData.Server = aBaseUrl + "lights?";
-		window.LightData.Lights = new Array("A2", "Living Room",
-				"A3", "Kitchen",
-				"A4", "Bathroom",
-				"A6", "Upstairs",
-				"A13", "Front Porch",
-				"A11", "Front House",
-				"z99", "All On/Off");
-		window.CloseUrl = aBaseUrl + "garage?action=Close";
-		window.OpenUrl = aBaseUrl + "garage?action=Open";
-		window.StatusUrl = aBaseUrl + "garage?action=Status";
-		window.WeatherUrl = aBaseUrl + "garage?action=Weather";
+		window.LightData.Lights = new Array("LivingRoom", "Living Room",
+				"X/A3", "Kitchen",
+				"BathRoom", "Bathroom",
+				"H/2", "Upstairs",
+				"X/A13", "Front Porch",
+				"X/A11", "Front House",
+				"AllLights", "All On/Off");
+		window.CloseUrl = "G/Close";
+		window.OpenUrl = "G/Open";
+		window.StatusUrl = "G/Status";
+		window.WeatherUrl = "G/Weather";
 		window.PollDelay = 5000;
 	</script>
 </head>

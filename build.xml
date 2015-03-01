@@ -20,7 +20,7 @@
 	<target name="dist" description="Compiles GWT application, generates manifest.appcache.  Places files in HouseLights">
 		<ant target="compile"/>
 		<ant target="manifest"/>
-		<ant target="updatePaths"/>
+		<!--<ant target="updatePaths"/>-->
 	</target>
 
 	<target name="compile">
@@ -33,11 +33,11 @@
 		</java>
 	</target>
 
-	<target name="updatePaths">
+	<!--<target name="updatePaths">
 		<replaceregexp match="#BaseUrl#" replace="${BaseUrl}" file="${final.dir}/HouseLights.html"/>
 		<replaceregexp match="#GarageUrl#" replace="${GarageUrl}" file="garage"/>
 		<replaceregexp match="#LightsUrl#" replace="${LightsUrl}" file="lights"/>
-	</target>
+	</target>-->
 
 	<target name="manifest">
 		<echo message="copying ${manifest} to /${final.dir}"/>
